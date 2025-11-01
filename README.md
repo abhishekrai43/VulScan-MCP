@@ -51,6 +51,7 @@ Just ask Copilot *"Check for security vulnerabilities"* and get instant CVE repo
 ---
 
 ## Example Output
+<img width="1505" height="778" alt="image" src="https://github.com/user-attachments/assets/2500ee3d-2c90-4613-abf4-8db6cc7a6b10" />
 
 ```markdown
 # VulScan-MCP Vulnerability Report
