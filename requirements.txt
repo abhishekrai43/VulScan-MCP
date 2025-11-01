@@ -2,5 +2,8 @@
 mcp>=1.0.0
 requests>=2.31.0
 
+# TOML parsing for pyproject.toml (Python < 3.11 compatibility)
+tomli>=2.0.0; python_version < '3.11'
+
 # Example vulnerable dependency (for testing)
 pyyaml==5.1
