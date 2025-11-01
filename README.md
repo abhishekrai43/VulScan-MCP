@@ -191,6 +191,179 @@ npm run compile
 
 ---
 
+## Troubleshooting
+
+### "Python not found" Error
+
+**Issue:** Extension fails to start with "Python not found"
+
+**Solutions:**
+```bash
+# Windows
+winget install Python.Python.3.12
+# or download from: https://python.org
+
+# macOS
+brew install python@3.11
+
+# Ubuntu/Debian
+sudo apt update
+sudo apt install python3.11 python3-pip
+
+# RHEL/CentOS/Fedora
+sudo yum install python311 python3-pip
+```
+
+After installing, **restart VS Code**.
+
+---
+
+### "No module named 'pip'" Error (Linux/macOS)
+
+**Issue:** System Python doesn't include pip
+
+**Solutions:**
+```bash
+# Ubuntu/Debian
+sudo apt install python3-pip
+
+# RHEL/CentOS/Fedora  
+sudo yum install python3-pip
+
+# macOS (use Homebrew Python, not system Python)
+brew install python@3.11
+# Then restart VS Code to pick up the new Python
+```
+
+Or install dependencies manually:
+```bash
+python3 -m pip install --user mcp requests
+```
+
+---
+
+### "ModuleNotFoundError: No module named 'mcp'" Error
+
+**Issue:** Python dependencies failed to install automatically
+
+**Manual Fix:**
+```bash
+# Navigate to extension directory
+cd ~/.vscode/extensions/abhishekrai43.vulscan-mcp-vscode-*/
+
+# Install dependencies
+python3 -m pip install --user -r requirements.txt
+
+# Or install directly
+python3 -m pip install --user mcp requests
+```
+
+Then **restart VS Code**.
+
+---
+
+### Corporate Firewall / Proxy Issues
+
+**Issue:** pip cannot reach PyPI due to corporate firewall
+
+**Solutions:**
+
+1. **Configure pip to use corporate proxy:**
+```bash
+export HTTP_PROXY=http://proxy.company.com:8080
+export HTTPS_PROXY=http://proxy.company.com:8080
+python3 -m pip install --user mcp requests
+```
+
+2. **Use company's internal PyPI mirror:**
+```bash
+python3 -m pip install --user -i https://pypi.company.com/simple mcp requests
+```
+
+3. **Download wheels manually** and install offline:
+```bash
+# On internet-connected machine:
+pip download mcp requests -d ~/Downloads/vulscan-deps/
+
+# On restricted machine:
+python3 -m pip install --user --no-index --find-links ~/Downloads/vulscan-deps/ mcp requests
+```
+
+---
+
+### Extension Keeps Stopping (Linux Remote/WSL)
+
+**Issue:** Server starts but immediately stops with exit code 1
+
+**Diagnosis:**
+```bash
+# Check launcher log
+cat /tmp/vulscan-launcher.log
+
+# Check server log  
+cat /tmp/vulscan-mcp-debug.log
+```
+
+**Common Causes:**
+- ✗ Missing pip → Install: `sudo apt install python3-pip`
+- ✗ Missing dependencies → Install: `python3 -m pip install --user mcp requests`
+- ✗ Permission issues → Use `--user` flag with pip
+- ✗ Old Python version → Upgrade to Python 3.11+
+
+---
+
+### Scan Returns No Results (But You Know There Are Vulnerabilities)
+
+**This is expected!** VulScan-MCP only reports **confirmed CVEs** from NVD/OSV databases. 
+
+**What it does NOT report:**
+- ❌ Deprecated packages (still functional, just not recommended)
+- ❌ Outdated versions (no known security issues)
+- ❌ Unmaintained packages (no CVEs reported)
+
+**To verify CVEs exist:**
+1. Visit https://osv.dev/
+2. Search for your package name + version
+3. Check if any CVEs are listed
+
+If OSV shows no CVEs, then "clean" results are **correct** ✓
+
+---
+
+### Debug Mode
+
+Enable detailed logging:
+
+```bash
+# Windows
+$env:VULSCAN_DEBUG="1"
+
+# macOS/Linux
+export VULSCAN_DEBUG=1
+```
+
+Then restart VS Code and check logs:
+- **Windows:** `%TEMP%\vulscan-launcher.log` and `%TEMP%\vulscan-mcp-debug.log`
+- **macOS/Linux:** `/tmp/vulscan-launcher.log` and `/tmp/vulscan-mcp-debug.log`
+
+---
+
+### Still Having Issues?
+
+1. **Check logs:** See paths above for debug logs
+2. **Verify Python:** `python3 --version` (should be 3.11+)
+3. **Verify pip:** `python3 -m pip --version`
+4. **Test dependencies:** `python3 -c "import mcp, requests"`
+5. **Report issue:** https://github.com/abhishekrai43/VulScan-MCP/issues
+
+Include:
+- Operating System (Windows/macOS/Linux)
+- Python version: `python3 --version`
+- Log files: launcher.log and debug.log
+- Error messages from VS Code output panel
+
+---
+
 ## Contributing
 
 Contributions are welcome! Please:
