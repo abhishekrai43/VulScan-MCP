@@ -8,7 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable);
   
   vscode.window.showInformationMessage(
-    '✅ VulScan-MCP Security Scanner is ready! Ask Copilot: "Check for vulnerabilities"'
+    'VulScan-MCP Security Scanner is ready! Ask Copilot: "Check for vulnerabilities"'
   );
 }
 

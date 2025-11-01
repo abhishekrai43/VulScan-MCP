@@ -121,10 +121,10 @@ All locally on your machine - your code never leaves your computer!
 
 ## Privacy & Security
 
-- ✅ **100% Local Processing** - Code stays on your machine
-- ✅ **No Telemetry** - Zero data collection
-- ✅ **Open Source** - Full transparency
-- ✅ **API Queries Only** - Only queries public CVE databases
+-  **100% Local Processing** - Code stays on your machine
+-  **No Telemetry** - Zero data collection
+-  **Open Source** - Full transparency
+-  **API Queries Only** - Only queries public CVE databases
 
 ---
 

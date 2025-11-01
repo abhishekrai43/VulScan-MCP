@@ -38,10 +38,10 @@ Open VS Code and install:
 - **GitHub Copilot** - Required for MCP integration
 
 **That's it!** The extension automatically:
-- ✅ Detects your Python installation
-- ✅ Installs required dependencies on first use
-- ✅ Registers the MCP server with Copilot
-- ✅ Works immediately - no configuration needed!
+-  Detects your Python installation
+-  Installs required dependencies on first use
+-  Registers the MCP server with Copilot
+-  Works immediately - no configuration needed!
 
 ### 3. Start Scanning!
 
@@ -125,12 +125,12 @@ in a staging environment before deploying to production.
 
 Just ask Copilot Chat naturally:
 
-✅ **"Check for vulnerabilities"**  
-✅ **"Scan my dependencies"**  
-✅ **"Any security issues?"**  
-✅ **"Check for CVEs"**  
-✅ **"Is my project secure?"**  
-✅ **"Audit my packages"**  
+ **"Check for vulnerabilities"**  
+ **"Scan my dependencies"**  
+ **"Any security issues?"**  
+ **"Check for CVEs"**  
+ **"Is my project secure?"**  
+ **"Audit my packages"**  
 
 The extension automatically activates - no need to mention "MCP" or "tool"!
 
@@ -145,17 +145,17 @@ The extension automatically activates - no need to mention "MCP" or "tool"!
 
 ## Platform Support
 
-### ✅ Windows
+###  Windows
 - Windows 10, 11
 - PowerShell or Command Prompt
 - Python from Microsoft Store or python.org
 
-### ✅ macOS  
+###  macOS  
 - macOS 10.15+
 - Intel and Apple Silicon (M1/M2/M3)
 - Python via Homebrew or system Python
 
-### ✅ Linux
+###  Linux
 - Ubuntu, Debian, Fedora, Arch
 - All major distributions
 - Python 3.11+ from package manager
@@ -164,10 +164,10 @@ The extension automatically activates - no need to mention "MCP" or "tool"!
 
 ## Privacy & Security
 
-- ✅ **100% Local** - All scanning happens on your machine
-- ✅ **No Telemetry** - Your code stays private
-- ✅ **Open Source** - Full transparency
-- ✅ **API Queries Only** - Only checks public CVE databases
+-  **100% Local** - All scanning happens on your machine
+-  **No Telemetry** - Your code stays private
+-  **Open Source** - Full transparency
+-  **API Queries Only** - Only checks public CVE databases
 
 Your code never leaves your computer!
 

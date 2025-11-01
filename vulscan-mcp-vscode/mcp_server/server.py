@@ -22,9 +22,19 @@ try:
 except ImportError:
     from vuln_scanner import scan_repo
 
-# Configure logging
-logging.basicConfig(stream=sys.stderr, level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+# Configure logging - log to both stderr AND a file
+import tempfile
+log_file = tempfile.gettempdir() + '/vulscan-mcp-debug.log'
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler(sys.stderr),
+        logging.FileHandler(log_file, mode='w')
+    ]
+)
 logger = logging.getLogger("vulscan-mcp")
+logger.info(f"Logging to {log_file}")
 
 # Create MCP server
 app = Server("VulScan-MCP")
@@ -86,17 +96,24 @@ def to_markdown(results: dict[str, Any]) -> str:
             lines.append(f"- **Severity:** {sev}")
             lines.append(f"- **Fix:** {fix}\n")
     else:
-        lines.append("## ✅ No Vulnerabilities Found\n")
+        lines.append("##  No Vulnerabilities Found\n")
     
     return "\n".join(lines)
 
 
 async def serve():
     """Run the MCP server using stdio transport"""
-    logger.info("Starting VulScan-MCP server")
-    async with stdio_server() as (read_stream, write_stream):
-        await app.run(read_stream, write_stream, app.create_initialization_options())
-    logger.info("VulScan-MCP server stopped")
+    try:
+        logger.info("Starting VulScan-MCP server")
+        options = app.create_initialization_options()
+        logger.info("Created initialization options")
+        async with stdio_server() as (read_stream, write_stream):
+            logger.info("Stdio server started, running app")
+            await app.run(read_stream, write_stream, options)
+        logger.info("VulScan-MCP server stopped normally")
+    except Exception as e:
+        logger.exception(f"Server error: {e}")
+        raise
 
 
 if __name__ == "__main__":
