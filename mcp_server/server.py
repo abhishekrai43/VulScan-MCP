@@ -126,15 +126,11 @@ def handle_initialize(msg):
         "result": {
             "protocolVersion": "2025-06-18",
             "capabilities": {
-                "tools": {
-                    "scan_repo": {
-                        "description": "Scan repository for vulnerable dependencies and get remediation steps"
-                    }
-                }
+                "tools": {}  # Empty dict means server supports tools
             },
             "serverInfo": {
                 "name": "VulScan-MCP",
-                "version": "1.0.0"
+                "version": "1.0.3"
             }
         }
     }

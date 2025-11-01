@@ -89,8 +89,10 @@ async function main() {
     const newPythonPath = pythonPath ? `${extensionDir}${path.delimiter}${pythonPath}` : extensionDir;
     
     // Launch MCP server
+    // IMPORTANT: Use 'pipe' for stdin/stdout (MCP protocol communication)
+    // Only stderr is inherited for logging
     const mcpServer = spawn(pythonCmd, ['-u', '-m', 'mcp_server'], {
-      stdio: 'inherit',
+      stdio: ['pipe', 'pipe', 'inherit'],  // stdin/stdout for MCP, stderr for logs
       env: {
         ...process.env,
         PYTHONIOENCODING: 'utf-8',
@@ -98,6 +100,10 @@ async function main() {
       },
       cwd: extensionDir
     });
+    
+    // Pipe stdin/stdout for MCP protocol
+    process.stdin.pipe(mcpServer.stdin);
+    mcpServer.stdout.pipe(process.stdout);
     
     mcpServer.on('error', (err) => {
       console.error('[VulScan-MCP] Failed to start MCP server:', err);
