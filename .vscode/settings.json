@@ -1,0 +1,12 @@
+{
+  "mcp.servers": {
+    "vulscan-mcp": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["-u", "-m", "mcp_server"],
+      "cwd": "${workspaceFolder}",
+      "label": "VulScan MCP Server",
+      "description": "Scan repo for vulnerable dependencies and get remediation steps"
+    }
+  }
+}

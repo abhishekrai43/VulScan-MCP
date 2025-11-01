@@ -6,7 +6,7 @@
     "url": "https://github.com/abhishekrai43/VulScan-MCP.git"
   },
   "description": "Security vulnerability scanner for dependencies. Checks CVEs from NVD/OSV databases and provides remediation steps. Supports npm, pip, Maven, Go, and more.",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "publisher": "abhishekrai43",
   "icon": "icon.png",
   "license": "MIT",
@@ -35,24 +35,21 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "modelContextProtocol.servers": [
+    "mcpServerDefinitionProviders": [
       {
         "id": "vulscan-mcp-server",
-        "label": "VulScan MCP Server",
-        "description": "Scan for vulnerable dependencies and get remediation steps.",
-        "entry": "./mcp.json"
+        "label": "VulScan-MCP Security Scanner"
       }
     ]
-  }
-,
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-  "@types/vscode": "^1.85.0",
-  "typescript": "^5.0.0"
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.0.0"
   },
   "dependencies": {}
 }

@@ -37,7 +37,11 @@ Open VS Code and install:
 - **Python 3.11+** - [Download here](https://www.python.org/downloads/)
 - **GitHub Copilot** - Required for MCP integration
 
-**That's it!** The extension includes the MCP server and will automatically install Python dependencies on first run.
+**That's it!** The extension automatically:
+- ✅ Detects your Python installation
+- ✅ Installs required dependencies on first use
+- ✅ Registers the MCP server with Copilot
+- ✅ Works immediately - no configuration needed!
 
 ### 3. Start Scanning!
 
@@ -171,13 +175,24 @@ Your code never leaves your computer!
 
 ## Troubleshooting
 
+### "MCP server not available in Copilot"
+1. Ensure you have **version 1.0.3+** of this extension installed
+2. Reload VS Code window (`Ctrl+Shift+P` → "Developer: Reload Window")
+3. The server registers automatically - no settings.json configuration needed!
+
 ### "Python not found"
 Install Python 3.11+ from [python.org](https://www.python.org/downloads/)
+
+Make sure `python` or `python3` command works in your terminal:
+```bash
+python --version  # or python3 --version
+```
 
 ### "Extension not working"
 1. Ensure GitHub Copilot is installed and active
 2. Reload VS Code (`Ctrl+Shift+P` → "Reload Window")
 3. Check Python version: `python --version` (should be 3.11+)
+4. First scan may take 10-20 seconds while installing dependencies
 
 ### "No results returned"
 - Check your internet connection (needed for CVE databases)
