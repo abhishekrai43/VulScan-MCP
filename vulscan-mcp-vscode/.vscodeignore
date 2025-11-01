@@ -1,0 +1,29 @@
+# Test files
+out/test
+src/**/*.ts
+!src/**/*.d.ts
+
+# Development files
+.vscode
+.git
+.gitignore
+tsconfig.json
+package-lock.json
+
+# Source maps
+**/*.map
+
+# Node modules (except what's needed)
+node_modules/vscode
+
+# Python cache (don't package)
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Keep these (bundled with extension)
+!mcp_server/
+!requirements.txt
+!launcher.js
+!mcp.json

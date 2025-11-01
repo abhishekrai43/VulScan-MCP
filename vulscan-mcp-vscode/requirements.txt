@@ -1,0 +1,6 @@
+# MCP Server Dependencies
+mcp>=1.0.0
+requests>=2.31.0
+
+# Example vulnerable dependency (for testing)
+pyyaml==5.1

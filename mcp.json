@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "vulscanMcp": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["-u", "-m", "mcp_server"],
+      "description": "VulScan-MCP: Security vulnerability scanner that checks dependencies for CVEs, security issues, and known vulnerabilities. Use for: vulnerability scanning, security audits, CVE checking, dependency security analysis, package vulnerability detection. Fetches real-time data from NVD and OSV databases.",
+      "tags": ["security", "vulnerability", "CVE", "audit", "dependencies", "scanning"]
+    }
+  }
+}
