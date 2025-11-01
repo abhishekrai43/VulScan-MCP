@@ -1,4 +1,4 @@
-# VulScan-MCP 🔒
+# VulScan-MCP 
 
 **Enterprise-grade security vulnerability scanner for VS Code**
 
@@ -13,11 +13,11 @@ Automatically scan your project dependencies for CVEs and get step-by-step remed
 ## What Is This?
 
 VulScan-MCP is a VS Code extension that:
-- 🔍 Scans your dependencies for known vulnerabilities (CVEs)
-- 📊 Fetches real-time data from NVD and OSV databases
-- 📝 Provides clear, step-by-step fix instructions
-- 🚫 Never auto-applies fixes - always guides you safely
-- 🌍 Works on Windows, macOS, and Linux
+-  Scans your dependencies for known vulnerabilities (CVEs)
+-  Fetches real-time data from NVD and OSV databases
+-  Provides clear, step-by-step fix instructions
+-  Never auto-applies fixes - always guides you safely
+-  Works on Windows, macOS, and Linux
 
 Just ask Copilot *"Check for vulnerabilities"* and get instant security insights!
 
@@ -88,22 +88,22 @@ in a staging environment before deploying to production.
 
 ## Features
 
-✨ **Real-Time CVE Scanning**  
+ **Real-Time CVE Scanning**  
 Fetches latest vulnerability data from NVD and OSV databases
 
-🎯 **Smart Auto-Detection**  
+ **Smart Auto-Detection**  
 Automatically activates when you ask about security
 
-📝 **Clear Remediation Steps**  
+ **Clear Remediation Steps**  
 Get specific commands and version numbers to fix issues
 
-⚠️ **Breaking Change Warnings**  
+ **Breaking Change Warnings**  
 Warns you when updates might introduce breaking changes
 
-🚫 **Safe by Design**  
+ **Safe by Design**  
 Never modifies your code - only provides guidance
 
-🌍 **Cross-Platform**  
+ **Cross-Platform**  
 Works seamlessly on Windows, macOS, and Linux
 
 ---
@@ -193,9 +193,9 @@ MIT License - see [LICENSE](LICENSE) file
 
 ## Issues & Support
 
-- 🐛 [Report a Bug](https://github.com/abhishekrai43/VulScan-MCP/issues)
-- 💡 [Request a Feature](https://github.com/abhishekrai43/VulScan-MCP/issues)
-- 📖 [View Documentation](https://github.com/abhishekrai43/VulScan-MCP)
+-  [Report a Bug](https://github.com/abhishekrai43/VulScan-MCP/issues)
+-  [Request a Feature](https://github.com/abhishekrai43/VulScan-MCP/issues)
+-  [View Documentation](https://github.com/abhishekrai43/VulScan-MCP)
 
 ---
 
@@ -208,6 +208,3 @@ Built with:
 
 ---
 
-**Made with ❤️ by [@abhishekrai43](https://github.com/abhishekrai43)**
-
-*Keeping your code secure, one dependency at a time.*
