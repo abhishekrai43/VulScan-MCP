@@ -1,6 +1,6 @@
 # VulScan-MCP 
 
-**Enterprise-grade security vulnerability scanner for VS Code**
+**Security vulnerability scanner for VS Code**
 
 Automatically scan your project dependencies for CVEs and get step-by-step remediation instructions - all powered by the Model Context Protocol (MCP).
 
