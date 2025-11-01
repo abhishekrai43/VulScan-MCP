@@ -91,7 +91,8 @@ def to_markdown(results: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-async def main():
+async def serve():
+    """Run the MCP server using stdio transport"""
     logger.info("Starting VulScan-MCP server")
     async with stdio_server() as (read_stream, write_stream):
         await app.run(read_stream, write_stream, app.create_initialization_options())
@@ -99,4 +100,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import asyncio
+    asyncio.run(serve())

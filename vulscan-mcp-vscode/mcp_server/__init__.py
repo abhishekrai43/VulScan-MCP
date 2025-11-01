@@ -1,4 +1,9 @@
 # E:\VulScan-MCP\mcp_server\__init__.py
-# expose package entrypoint
-from .server import main  # server.py contains the main() loop
+import asyncio
+from .server import serve
+
+def main():
+    """Entry point for the MCP server - calls async serve() function"""
+    asyncio.run(serve())
+
 __all__ = ["main"]
