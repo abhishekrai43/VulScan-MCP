@@ -35,8 +35,11 @@ Just ask Copilot *"Check for security vulnerabilities"* and get instant CVE repo
    - Click Install
 
 2. **Prerequisites:**
-   - Python 3.11+ ([Download](https://www.python.org/downloads/))
+   - **Python 3.11+** installed **globally** ([Download](https://www.python.org/downloads/))
    - GitHub Copilot extension
+   
+   > ⚠️ **Important:** VulScan-MCP requires **global Python**, not a project venv.  
+   > This is a system-level security tool that scans all your projects.
 
 3. **Start Scanning:**
    ```
