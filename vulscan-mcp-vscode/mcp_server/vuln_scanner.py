@@ -1,8 +1,12 @@
 import os
 import logging
 from typing import Dict, Any, List
-from mcp_server.dep_parser import parse_manifest
-from mcp_server.cve_fetcher import fetch_cves
+try:
+    from .dep_parser import parse_manifest
+    from .cve_fetcher import fetch_cves
+except ImportError:
+    from dep_parser import parse_manifest
+    from cve_fetcher import fetch_cves
 
 log = logging.getLogger("vulscan-mcp")
 
