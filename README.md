@@ -13,13 +13,14 @@ Automatically scan your project dependencies for CVEs and get step-by-step remed
 ## What Is This?
 
 VulScan-MCP is a VS Code extension that:
--  Scans your dependencies for known vulnerabilities (CVEs)
--  Fetches real-time data from NVD and OSV databases
--  Provides clear, step-by-step fix instructions
--  Never auto-applies fixes - always guides you safely
--  Works on Windows, macOS, and Linux
+- 🔍 Scans your dependencies for **security vulnerabilities (CVEs only)**
+- 🌐 Fetches real-time data from NVD (National Vulnerability Database) and OSV (Open Source Vulnerabilities)
+- 📋 Provides clear, step-by-step fix instructions
+- ⚠️ **Important:** This tool finds **security vulnerabilities** - it does NOT check for deprecated packages, outdated versions, or general package health
+- 🛡️ Never auto-applies fixes - always guides you safely
+- 🖥️ Works on Windows, macOS, and Linux
 
-Just ask Copilot *"Check for vulnerabilities"* and get instant security insights!
+Just ask Copilot *"Check for security vulnerabilities"* and get instant CVE reports!
 
 ---
 
@@ -83,6 +84,24 @@ in a staging environment before deploying to production.
 | PHP | Composer | `composer.json` |
 | C++ | vcpkg/conan | `vcpkg.json`, `conanfile.txt` |
 | .NET | NuGet | `.csproj` |
+
+---
+
+## What Does It Check?
+
+### ✅ What VulScan-MCP DOES Check:
+- **Security Vulnerabilities (CVEs)** - Known exploitable security flaws with CVE identifiers
+- **Vulnerable Dependencies** - Dependencies with reported security issues in NVD/OSV databases
+- **Security Fixes** - Available patches and versions that fix security vulnerabilities
+
+### ❌ What VulScan-MCP DOES NOT Check:
+- ~~Deprecated packages~~ - Package deprecation status
+- ~~Outdated versions~~ - General package freshness or latest versions
+- ~~Package health~~ - Maintenance status, download counts, or popularity
+- ~~License issues~~ - License compatibility or compliance
+- ~~Code quality~~ - Code style, linting, or best practices
+
+**Focus**: This tool is laser-focused on **security vulnerabilities only**. If your dependencies have no CVEs in the NVD/OSV databases, the scan will return clean results even if packages are outdated or deprecated.
 
 ---
 

@@ -6,7 +6,7 @@
     "url": "https://github.com/abhishekrai43/VulScan-MCP.git"
   },
   "description": "Security vulnerability scanner for dependencies. Checks CVEs from NVD/OSV databases and provides remediation steps. Supports npm, pip, Maven, Go, and more.",
-  "version": "1.0.17",
+  "version": "1.0.19",
   "publisher": "abhishekrai43",
   "icon": "icon.png",
   "license": "MIT",

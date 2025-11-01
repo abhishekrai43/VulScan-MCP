@@ -45,7 +45,7 @@ async def list_tools() -> list[Tool]:
     return [
         Tool(
             name="scan_repo",
-            description="Scan repository for security vulnerabilities, CVEs, and vulnerable dependencies. Fetches real-time CVE data from NVD and OSV databases.",
+            description="Scan repository for SECURITY VULNERABILITIES (CVEs) in dependencies. Checks National Vulnerability Database (NVD) and Open Source Vulnerabilities (OSV) for known security issues. NOTE: This tool finds security vulnerabilities only - it does NOT check for deprecated packages or outdated versions.",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -88,8 +88,8 @@ def to_markdown(results: dict[str, Any]) -> str:
     if vulnerabilities:
         lines.append("## Vulnerabilities\n")
         for vuln in vulnerabilities:
-            pkg = vuln.get("package", "unknown")
-            ver = vuln.get("version", "unknown")
+            pkg = vuln.get("name", vuln.get("package", "N/A"))
+            ver = vuln.get("version", "N/A")
             sev = vuln.get("severity", "UNKNOWN")
             fix = vuln.get("fix", "No fix available")
             lines.append(f"### {pkg} @ {ver}")

@@ -88,8 +88,8 @@ def to_markdown(results: dict[str, Any]) -> str:
     if vulnerabilities:
         lines.append("## Vulnerabilities\n")
         for vuln in vulnerabilities:
-            pkg = vuln.get("package", "unknown")
-            ver = vuln.get("version", "unknown")
+            pkg = vuln.get("name", vuln.get("package", "N/A"))
+            ver = vuln.get("version", "N/A")
             sev = vuln.get("severity", "UNKNOWN")
             fix = vuln.get("fix", "No fix available")
             lines.append(f"### {pkg} @ {ver}")
