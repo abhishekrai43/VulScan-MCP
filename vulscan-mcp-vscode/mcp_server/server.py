@@ -196,6 +196,11 @@ def main():
                 log.info("Handling initialize")
                 handle_initialize(msg)
                 continue
+            
+            if method == "notifications/initialized":
+                log.info("Received initialized notification from client")
+                # Client is ready, no response needed for notifications
+                continue
 
             if method == "tools/list":
                 log.info("Handling tools/list")

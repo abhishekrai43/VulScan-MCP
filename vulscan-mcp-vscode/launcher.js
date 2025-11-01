@@ -102,6 +102,7 @@ async function main() {
     });
     
     // Pipe stdin/stdout for MCP protocol
+    // Keep stdin/stdout connected for bidirectional JSON-RPC communication
     process.stdin.pipe(mcpServer.stdin);
     mcpServer.stdout.pipe(process.stdout);
     
