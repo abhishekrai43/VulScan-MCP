@@ -92,11 +92,33 @@ def to_markdown(results: dict[str, Any]) -> str:
             ver = vuln.get("version", "N/A")
             sev = vuln.get("severity", "UNKNOWN")
             fix = vuln.get("fix", "No fix available")
+            
             lines.append(f"### {pkg} @ {ver}")
             lines.append(f"- **Severity:** {sev}")
-            lines.append(f"- **Fix:** {fix}\n")
+            lines.append(f"- **Fix:** {fix}")
+            
+            # Add actual CVE details
+            osv_vulns = vuln.get("osv_vulns", [])
+            nvd_vulns = vuln.get("nvd_vulns", [])
+            
+            if osv_vulns:
+                lines.append(f"- **OSV CVEs ({len(osv_vulns)}):**")
+                for osv in osv_vulns[:3]:  # Limit to 3
+                    cve_id = osv.get("id", "Unknown")
+                    summary = osv.get("summary", "No description").replace("\n", " ").strip()
+                    lines.append(f"  - {cve_id}: {summary[:100]}{'...' if len(summary) > 100 else ''}")
+            
+            if nvd_vulns:
+                lines.append(f"- **NVD CVEs ({len(nvd_vulns)}):**")
+                for nvd in nvd_vulns[:3]:  # Limit to 3
+                    cve_id = nvd.get("cve", {}).get("id", "Unknown")
+                    desc = nvd.get("cve", {}).get("descriptions", [{}])[0].get("value", "No description")
+                    desc = desc.replace("\n", " ").strip()
+                    lines.append(f"  - {cve_id}: {desc[:100]}{'...' if len(desc) > 100 else ''}")
+            
+            lines.append("")  # Empty line between vulnerabilities
     else:
-        lines.append("##  No Vulnerabilities Found\n")
+        lines.append("## ✅ No Vulnerabilities Found\n")
     
     return "\n".join(lines)
 
