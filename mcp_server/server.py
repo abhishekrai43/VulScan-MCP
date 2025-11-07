@@ -68,10 +68,13 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
     logger.info(f"Scanning repository: {arguments}")
     repo_path = arguments.get("repoPath", ".")
     
+    # Enforce: Only return markdown report, no further tool calls or model answers
     try:
         results = scan_repo(repo_path)
         markdown = to_markdown(results)
         logger.info("Scan completed")
+        # Block any further tool calls or model-generated answers after this point
+        # The markdown report is the ONLY output
         return [TextContent(type="text", text=markdown)]
     except Exception as e:
         logger.exception(f"Scan error: {e}")
@@ -83,31 +86,46 @@ def to_markdown(results: dict[str, Any]) -> str:
     lines.append("## Summary")
     lines.append(f"- Total Dependencies: {results.get('total_dependencies', 0)}")
     lines.append(f"- Vulnerable: {results.get('vulnerable_dependencies', 0)}\n")
-    
+
     vulnerabilities = results.get("vulnerabilities", [])
-    if vulnerabilities:
+    # Deduplicate vulnerabilities by (name, version)
+    seen = set()
+    unique_vulns = []
+    for vuln in vulnerabilities:
+        key = (vuln.get("name", "N/A"), vuln.get("version", "N/A"))
+        if key not in seen:
+            seen.add(key)
+            unique_vulns.append(vuln)
+
+    if unique_vulns:
         lines.append("## Vulnerabilities\n")
-        for vuln in vulnerabilities:
+        for vuln in unique_vulns:
             pkg = vuln.get("name", vuln.get("package", "N/A"))
             ver = vuln.get("version", "N/A")
             sev = vuln.get("severity", "UNKNOWN")
             fix = vuln.get("fix", "No fix available")
-            
+
+            # Always output fix as plain text (not dict)
+            if isinstance(fix, dict):
+                fix_text = ", ".join(str(s) for s in fix.get("steps", []))
+            else:
+                fix_text = str(fix)
+
             lines.append(f"### {pkg} @ {ver}")
             lines.append(f"- **Severity:** {sev}")
-            lines.append(f"- **Fix:** {fix}")
-            
+            lines.append(f"- **Fix:** {fix_text}")
+
             # Add actual CVE details
             osv_vulns = vuln.get("osv_vulns", [])
             nvd_vulns = vuln.get("nvd_vulns", [])
-            
+
             if osv_vulns:
                 lines.append(f"- **OSV CVEs ({len(osv_vulns)}):**")
                 for osv in osv_vulns[:3]:  # Limit to 3
                     cve_id = osv.get("id", "Unknown")
                     summary = osv.get("summary", "No description").replace("\n", " ").strip()
                     lines.append(f"  - {cve_id}: {summary[:100]}{'...' if len(summary) > 100 else ''}")
-            
+
             if nvd_vulns:
                 lines.append(f"- **NVD CVEs ({len(nvd_vulns)}):**")
                 for nvd in nvd_vulns[:3]:  # Limit to 3
@@ -115,11 +133,11 @@ def to_markdown(results: dict[str, Any]) -> str:
                     desc = nvd.get("cve", {}).get("descriptions", [{}])[0].get("value", "No description")
                     desc = desc.replace("\n", " ").strip()
                     lines.append(f"  - {cve_id}: {desc[:100]}{'...' if len(desc) > 100 else ''}")
-            
+
             lines.append("")  # Empty line between vulnerabilities
     else:
         lines.append("## ✅ No Vulnerabilities Found\n")
-    
+
     return "\n".join(lines)
 
 

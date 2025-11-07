@@ -51,15 +51,23 @@ def scan_repo(repo_path: str = ".") -> Dict[str, Any]:
             
             # Combine vulnerabilities from both sources
             if osv_vulns or nvd_vulns:
+                fix_data = _generate_fix(dep, osv_vulns, nvd_vulns)
+                # Build plain-English summary and remediation steps so the calling UI/LLM
+                # doesn't need to generate them and we keep format consistent.
+                what_text = _summarize_vulnerability(osv_vulns, nvd_vulns, dep.get("name", "package"))
+                remediation = _build_remediation_list(fix_data, osv_vulns, nvd_vulns)
+
                 vulnerabilities.append({
                     "name": dep.get("name"),
                     "version": dep.get("version"),
                     "osv_count": len(osv_vulns),
                     "nvd_count": len(nvd_vulns),
-                    "osv_vulns": osv_vulns[:3],  # Limit to first 3 for summary
-                    "nvd_vulns": nvd_vulns[:3],
+                    "osv_vulns": osv_vulns,  # include all fetched OSV entries
+                    "nvd_vulns": nvd_vulns,  # include all fetched NVD entries
                     "severity": _get_severity(osv_vulns, nvd_vulns),
-                    "fix": _generate_fix(dep, osv_vulns, nvd_vulns)
+                    "fix": fix_data,
+                    "what": what_text,
+                    "remediation_steps": remediation
                 })
     
     log.info(f"Found {len(vulnerabilities)} packages with vulnerabilities")
@@ -91,10 +99,11 @@ def _get_severity(osv_vulns: List, nvd_vulns: List) -> str:
     
     return "MEDIUM"
 
-def _generate_fix(dep: Dict, osv_vulns: List, nvd_vulns: List) -> str:
+def _generate_fix(dep: Dict, osv_vulns: List, nvd_vulns: List) -> Dict[str, Any]:
     """Generate fix recommendations based on vulnerabilities."""
-    fixes = []
-    
+    fixes: List[str] = []
+    is_version_upgrade = False
+
     # Check OSV for fixed versions
     for vuln in osv_vulns:
         affected = vuln.get("affected", [])
@@ -106,9 +115,69 @@ def _generate_fix(dep: Dict, osv_vulns: List, nvd_vulns: List) -> str:
                     for event in events:
                         if "fixed" in event:
                             fixes.append(f"Upgrade to version {event['fixed']} or later")
+                            is_version_upgrade = True
                             break
-    
-    if fixes:
-        return "; ".join(fixes)
-    
-    return "Review vulnerability details and update to latest secure version"
+
+    if not fixes:
+        fixes.append("Review vulnerability details and update to latest secure version")
+
+    return {
+        "fix_type": "version_upgrade" if is_version_upgrade else "manual_review",
+        "steps": fixes
+    }
+
+
+def _summarize_vulnerability(osv_vulns: List, nvd_vulns: List, pkg: str) -> str:
+    """Create a short, plain-English summary of what the vulnerability does."""
+    # Prefer OSV summary if present
+    summary = ""
+    if osv_vulns:
+        s = osv_vulns[0].get("summary", "").strip()
+        if s:
+            summary = s
+
+    # Otherwise fall back to NVD description
+    if not summary and nvd_vulns:
+        desc = nvd_vulns[0].get("cve", {}).get("descriptions", [{}])[0].get("value", "").strip()
+        summary = desc
+
+    if not summary:
+        return f"A vulnerability was reported for {pkg}. Review CVE details for more information."
+
+    # Simplify wording a bit for readability
+    summary = summary.replace("An issue was discovered in", f"A security issue exists in {pkg} that")
+    summary = summary.replace("allows", "lets attackers")
+    summary = summary.replace("attacker", "attacker/hacker")
+    summary = summary.replace("attackers to", "hackers to")
+    # Trim to a reasonable length
+    summary = summary.replace("\n", " ").strip()
+    if len(summary) > 600:
+        summary = summary[:600].rsplit(" ", 1)[0] + "..."
+    return summary
+
+
+def _build_remediation_list(fix_data: Dict[str, Any], osv_vulns: List, nvd_vulns: List) -> List[str]:
+    """Normalize and expand remediation guidance into a numbered list of steps."""
+    steps: List[str] = []
+    if not fix_data:
+        return ["Review vulnerability details and update to a secure version"]
+
+    raw_steps = fix_data.get("steps", []) if isinstance(fix_data.get("steps", []), list) else [fix_data.get("steps", "Review and remediate")]
+    # Copy raw steps
+    for s in raw_steps:
+        steps.append(s)
+
+    # If version upgrade, prepend explicit warning and append test/staging guidance
+    if fix_data.get("fix_type") == "version_upgrade":
+        warning = "WARNING: This fix requires a version upgrade. This may introduce breaking changes. Test thoroughly in a staging environment before deploying to production."
+        # Ensure warning is first
+        if not steps or steps[0] != warning:
+            steps.insert(0, warning)
+
+        # Append common best-practices if not already present
+        if not any("Run full test suite" in s for s in steps):
+            steps.append("Run full test suite")
+        if not any("Deploy to staging" in s for s in steps):
+            steps.append("Deploy to staging and monitor")
+
+    return steps

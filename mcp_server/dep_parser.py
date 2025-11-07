@@ -131,6 +131,35 @@ def parse_manifest(manifest_path: str) -> List[Dict[str, str]]:
                     })
             return deps
         
+        if manifest_path.endswith("build.gradle") or manifest_path.endswith("build.gradle.kts"):
+            # Parse Gradle build files for dependencies
+            deps = []
+            with open(manifest_path, encoding='utf-8', errors='replace') as f:
+                content = f.read()
+            
+            # Look for dependency declarations in various Gradle formats
+            # implementation 'group:name:version'
+            # compile 'group:name:version'  
+            # api 'group:name:version'
+            # runtimeOnly 'group:name:version'
+            # testImplementation 'group:name:version'
+            
+            patterns = [
+                r"(?:implementation|compile|api|runtimeOnly|testImplementation|testCompile)\s+['\"]([^:]+):([^:]+):([^'\"]+)['\"]",
+                r"(?:implementation|compile|api|runtimeOnly|testImplementation|testCompile)\s*\(\s*['\"]([^:]+):([^:]+):([^'\"]+)['\"]\s*\)",
+            ]
+            
+            for pattern in patterns:
+                matches = re.findall(pattern, content, re.MULTILINE)
+                for group, name, version in matches:
+                    # For Gradle, we typically care about the artifact name, not the full group:name
+                    deps.append({
+                        "name": name,
+                        "version": version
+                    })
+            
+            return deps
+        
         # Add more formats as needed
         return []
     
