@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/abhishekrai43-vulscan-mcp-badge.png)](https://mseep.ai/app/abhishekrai43-vulscan-mcp)
+
 # VulScan-MCP 
 
 **Security vulnerability scanner for VS Code**
